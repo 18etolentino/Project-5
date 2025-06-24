@@ -241,7 +241,7 @@ body {
   justify-content: center;
   font-weight: bold;
   font-size: 1.2em;
-  color: #fff;
+  color: #ffd600;
   letter-spacing: 2px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
@@ -277,27 +277,30 @@ body {
   font-size: 1.1em;
   border: none;
   border-radius: 8px;
-  background: #00bfff;
-  color: #fff;
+  background: #000;
+  color: #FFD600;
   cursor: pointer;
   width: 220px;
   margin: 0 auto;
+  transition: background 0.2s, color 0.2s;
 }
-#end-modal #new-game-btn:active {
-  background: #0099cc;
+#end-modal #new-game-btn:hover {
+  background: #FFD600;
+  color: #000;
 }
 #end-modal #charity-link {
   display: block;
   padding: 10px 0;
-  color: #388e3c;
+  color: #000;
   font-weight: bold;
   text-decoration: none;
   border-radius: 6px;
-  background: #e0f7fa;
-  transition: background 0.2s;
+  background: #FFD600;
+  transition: background 0.2s, color 0.2s;
   width: 220px;
   margin: 0 auto;
 }
 #end-modal #charity-link:hover {
-  background: #b2ebf2;
+  background: #000;
+  color: #FFD600;
 }

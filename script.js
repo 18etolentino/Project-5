@@ -16,12 +16,29 @@ const restartBtn = document.getElementById('restart-btn');
 // Track all active items and their intervals
 let activeItems = [];
 
-let timer = 10;
+let timer = 60;
 let timerInterval = null;
-const timerDisplay = document.getElementById('timer');
+let timerStartTimestamp = null;
+const timerDisplay = document.getElementById('timer') || document.getElementById('top-timer');
 let finishLineActive = false;
 let finishLineReleased = false;
 let finishLineObj = null;
+let finishLineLeadTime = null; // seconds before timer=0 to start finish line
+
+function calculateFinishLineLeadTime() {
+  // Distance from top of game to player
+  const gameRect = game.getBoundingClientRect();
+  const playerRect = player.getBoundingClientRect();
+  // The finish line starts at -40px (its top), so distance is from -40 to playerRect.top relative to gameRect.top
+  const finishLineStart = -40;
+  const playerY = player.offsetTop; // relative to #game
+  const distance = playerY - finishLineStart;
+  const speed = 4; // px per frame
+  const interval = 50; // ms per frame
+  const frames = distance / speed;
+  const seconds = (frames * interval) / 1000;
+  return seconds;
+}
 
 function spawnItem() {
   if (finishLineActive || finishLineReleased) return;
@@ -226,6 +243,13 @@ function showEndModal() {
   const charityLink = document.getElementById('charity-link');
   if (waterLevel === 100) {
     message.textContent = 'Well done! Clean water reached the village.';
+    if (window.confetti) {
+      confetti({
+        particleCount: 120,
+        spread: 90,
+        origin: { y: 0.6 }
+      });
+    }
   } else {
     message.textContent = 'Try again! The jerrycan was not full.';
   }
@@ -241,18 +265,36 @@ function showEndModal() {
 }
 
 function startTimer() {
-  timer = 10;
-  timerDisplay.textContent = timer;
+  timer = 60;
+  timerStartTimestamp = Date.now();
+  updateTimerDisplay(60 * 1000);
   if (timerInterval) clearInterval(timerInterval);
+  finishLineLeadTime = calculateFinishLineLeadTime();
+  let finishLineStarted = false;
   timerInterval = setInterval(() => {
     if (!gamePaused) {
-      timer--;
-      timerDisplay.textContent = timer;
-      if (timer <= 0) {
-        endGame();
+      const elapsed = Date.now() - timerStartTimestamp;
+      const remaining = Math.max(0, 60 * 1000 - elapsed);
+      updateTimerDisplay(remaining);
+      const secondsLeft = Math.ceil(remaining / 1000);
+      if (!finishLineStarted && secondsLeft <= Math.ceil(finishLineLeadTime)) {
+        finishLineStarted = true;
+        spawnFinishLine();
+      }
+      if (remaining <= 0) {
+        clearInterval(timerInterval);
       }
     }
-  }, 1000);
+  }, 33); // ~30fps for smooth ms
+}
+
+function updateTimerDisplay(ms) {
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  const milliseconds = Math.floor((ms % 1000) / 10);
+  const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:${String(milliseconds).padStart(2, '0')}`;
+  if (timerDisplay) timerDisplay.textContent = formatted;
 }
 
 function stopTimer() {

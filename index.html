@@ -3,12 +3,98 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Water Run: The Clean Quest</title>
+  <title>Water Run: 
+    The Clean Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .game-title {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 700;
+      font-size: 2em;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #222;
+      margin: 0 0 10px 0;
+    }
+    .player-img {
+      width: 40px;
+      height: 60px;
+      display: block;
+      margin: 0 auto;
+    }
+    .legend {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 1em;
+    }
+    .legend-item {
+      display: inline-block;
+      margin: 0 8px;
+      font-size: 0.95em;
+    }
+    .legend-symbol {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+    .legend-symbol.clean {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #00bfff;
+    }
+    .legend-symbol.contaminated {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #4caf50;
+    }
+    .legend-symbol.obstacle {
+      width: 18px;
+      height: 12px;
+      border-radius: 3px;
+      background: #8b4513;
+    }
+    @media (max-width: 500px) {
+      .legend {
+        font-size: 0.85em;
+      }
+      .legend-symbol.clean,
+      .legend-symbol.contaminated {
+        width: 14px;
+        height: 14px;
+      }
+      .legend-symbol.obstacle {
+        width: 14px;
+        height: 9px;
+      }
+      #game {
+        width: 98vw;
+        height: 60vw;
+        min-width: 220px;
+        min-height: 300px;
+        max-width: 360px;
+        max-height: 600px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div style="height: 24px; margin-bottom: 8px;"></div>
+  <div class="game-title">Water Run: The Clean Quest</div>
+  <div class="legend">
+    <span class="legend-item"><span class="legend-symbol clean"></span> Clean Water</span>
+    <span class="legend-item"><span class="legend-symbol contaminated"></span> Contaminated Water</span>
+    <span class="legend-item"><span class="legend-symbol obstacle"></span> Obstacle</span>
+  </div>
   <div id="game">
-    <div class="player" id="player"></div>
+    <div class="player" id="player">
+      <img src="img/human.svg" alt="Player" class="player-img" />
+    </div>
     <div id="jerrycan">
       <div id="water-level"></div>
     </div>
@@ -30,5 +116,6 @@
     </div>
   </div>
   <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </body>
 </html>
