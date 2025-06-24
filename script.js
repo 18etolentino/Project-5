@@ -48,6 +48,17 @@ function spawnItem() {
   const type = types[Math.floor(Math.random() * types.length)];
   item.classList.add('item', type);
   item.style.left = lanes[lane] + 'px';
+  // Set emoji for each type
+  if (type === 'clean') {
+    item.textContent = '💧';
+  } else if (type === 'contaminated') {
+    item.textContent = '🧪';
+  } else if (type === 'obstacle') {
+    item.textContent = '🪨';
+  }
+  item.style.fontSize = '1.6em';
+  item.style.textAlign = 'center';
+  item.style.lineHeight = '30px';
   game.appendChild(item);
   let position = 0;
   const speed = 4;
@@ -200,6 +211,38 @@ function playerMoveHandler(e) {
 }
 disablePlayerMovement();
 
+// Touch swipe support for mobile
+let touchStartX = null;
+let touchStartY = null;
+
+game.addEventListener('touchstart', function(e) {
+  if (e.touches.length === 1) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }
+});
+game.addEventListener('touchend', function(e) {
+  if (touchStartX === null || touchStartY === null) return;
+  const touchEndX = e.changedTouches[0].clientX;
+  const touchEndY = e.changedTouches[0].clientY;
+  const dx = touchEndX - touchStartX;
+  const dy = touchEndY - touchStartY;
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 30) {
+    // Horizontal swipe
+    if (dx < 0 && currentLane > 0 && !gamePaused) {
+      // Swipe left
+      currentLane--;
+      player.style.left = lanes[currentLane] + 'px';
+    } else if (dx > 0 && currentLane < 2 && !gamePaused) {
+      // Swipe right
+      currentLane++;
+      player.style.left = lanes[currentLane] + 'px';
+    }
+  }
+  touchStartX = null;
+  touchStartY = null;
+});
+
 function handleCollision(item) {
   if (item.classList.contains('clean')) {
     waterLevel = Math.min(100, waterLevel + 10);
@@ -207,6 +250,9 @@ function handleCollision(item) {
     waterLevel = Math.max(0, waterLevel - 10);
   }
   jerrycan.style.height = waterLevel + '%';
+  if (waterLevel === 100) {
+    stopGameCompletely();
+  }
 }
 
 function endGame() {
@@ -241,6 +287,7 @@ function showEndModal() {
   const message = document.getElementById('end-message');
   const newGameBtn = document.getElementById('new-game-btn');
   const charityLink = document.getElementById('charity-link');
+  const failFlash = document.getElementById('fail-flash');
   if (waterLevel === 100) {
     message.textContent = 'Well done! Clean water reached the village.';
     if (window.confetti) {
@@ -250,10 +297,23 @@ function showEndModal() {
         origin: { y: 0.6 }
       });
     }
+    setTimeout(() => {
+      modal.style.display = 'flex';
+    }, 3000); // 3 seconds for confetti
   } else {
     message.textContent = 'Try again! The jerrycan was not full.';
+    if (failFlash) {
+      failFlash.style.display = 'block';
+      failFlash.style.animation = 'fail-flash 1.5s';
+      setTimeout(() => {
+        failFlash.style.display = 'none';
+        failFlash.style.animation = 'none';
+        modal.style.display = 'flex';
+      }, 3000);
+    } else {
+      modal.style.display = 'flex';
+    }
   }
-  modal.style.display = 'flex';
   newGameBtn.onclick = () => {
     modal.style.display = 'none';
     resetGame();

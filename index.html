@@ -36,41 +36,9 @@
       margin: 0 8px;
       font-size: 0.95em;
     }
-    .legend-symbol {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 4px;
-    }
-    .legend-symbol.clean {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #00bfff;
-    }
-    .legend-symbol.contaminated {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #4caf50;
-    }
-    .legend-symbol.obstacle {
-      width: 18px;
-      height: 12px;
-      border-radius: 3px;
-      background: #8b4513;
-    }
     @media (max-width: 500px) {
       .legend {
         font-size: 0.85em;
-      }
-      .legend-symbol.clean,
-      .legend-symbol.contaminated {
-        width: 14px;
-        height: 14px;
-      }
-      .legend-symbol.obstacle {
-        width: 14px;
-        height: 9px;
       }
       #game {
         width: 98vw;
@@ -84,12 +52,13 @@
   </style>
 </head>
 <body>
+  <div id="fail-flash" style="display:none;"></div>
   <div style="height: 24px; margin-bottom: 8px;"></div>
   <div class="game-title">Water Run: The Clean Quest</div>
   <div class="legend">
-    <span class="legend-item"><span class="legend-symbol clean"></span> Clean Water</span>
-    <span class="legend-item"><span class="legend-symbol contaminated"></span> Contaminated Water</span>
-    <span class="legend-item"><span class="legend-symbol obstacle"></span> Obstacle</span>
+    <span class="legend-item">💧 Clean Water</span>
+    <span class="legend-item">🧪 Contaminated Water</span>
+    <span class="legend-item">🪨 Obstacle</span>
   </div>
   <div id="game">
     <div class="player" id="player">

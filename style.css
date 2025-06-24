@@ -1,7 +1,9 @@
 body {
   margin: 0;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 500;
   background: #f4f4f4;
+  color: #222;
 }
 
 #game {
@@ -18,11 +20,13 @@ body {
 .player {
   width: 40px;
   height: 60px;
-  background: black;
   position: absolute;
   bottom: 20px;
   left: 160px;
   border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .item {
@@ -128,14 +132,13 @@ body {
 }
 
 .game-controls {
-  position: fixed;
-  left: 50%;
-  bottom: 32px;
-  transform: translateX(-50%);
+  position: static;
   display: flex !important;
   flex-direction: row;
   gap: 20px;
   z-index: 100;
+  justify-content: center;
+  margin-top: 24px;
 }
 
 #start-pause-btn, #restart-btn {
@@ -144,18 +147,18 @@ body {
   font-size: 1.2em;
   border: none;
   border-radius: 8px;
-  background: #00bfff;
-  color: #fff;
+  background: #FFD600;
+  color: #222;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 700;
   cursor: pointer;
   min-width: 100px;
+  transition: background 0.2s, color 0.2s;
 }
 
-#start-pause-btn:active, #restart-btn:active {
-  background: #0099cc;
-}
-
-#start-pause-btn {
-  display: none;
+#start-pause-btn:hover, #restart-btn:hover {
+  background: #222;
+  color: #FFD600;
 }
 
 .start-line, .finish-line {
@@ -303,4 +306,25 @@ body {
 #end-modal #charity-link:hover {
   background: #000;
   color: #FFD600;
+}
+#fail-flash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255,0,0,0.5);
+  z-index: 4000;
+  pointer-events: none;
+  display: none;
+  animation: none;
+}
+@keyframes fail-flash {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  30% { opacity: 0; }
+  40% { opacity: 1; }
+  60% { opacity: 0; }
+  70% { opacity: 1; }
+  100% { opacity: 0; }
 }
